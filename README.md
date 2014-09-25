@@ -1,5 +1,4 @@
 [![Build Status](https://travis-ci.org/rapid7/aruba.svg?branch=feature%2FMSP-11399%2Ftools-integration)](https://travis-ci.org/rapid7/aruba)
-[![Gem Version](https://badge.fury.io/rb/aruba.svg)](http://badge.fury.io/rb/aruba)
 [![Dependency Status](https://gemnasium.com/cucumber/aruba.png)](https://gemnasium.com/cucumber/aruba.png)
 [![Code Climate](https://codeclimate.com/github/cucumber/aruba.png)](https://codeclimate.com/github/cucumber/aruba)
 
