@@ -20,6 +20,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'fuubar', '>= 1.1.1'
   s.add_development_dependency 'cucumber-pro', '~> 0.0'
   s.add_development_dependency 'rubocop', '~> 0.26.0'
+  s.add_development_dependency 'coveralls', '~> 0.7.1'
   s.add_development_dependency 'simplecov', '~> 0.9.1'
 
   s.rubygems_version = ">= 1.6.1"
