@@ -1,3 +1,6 @@
+# require before anything else so as many files as possible have coverage gathered
+require 'simplecov'
+
 require 'rspec/core'
 require 'aruba/api'
 
