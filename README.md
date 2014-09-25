@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/rapid7/aruba.svg?branch=feature%2FMSP-11399%2Ftools-integration)](https://travis-ci.org/rapid7/aruba)
 [![Dependency Status](https://gemnasium.com/rapid7/aruba.png)](https://gemnasium.com/rapid7/aruba.png)
-[![Code Climate](https://codeclimate.com/github/cucumber/aruba.png)](https://codeclimate.com/github/cucumber/aruba)
+[![Code Climate](https://codeclimate.com/github/rapid7/aruba.png)](https://codeclimate.com/github/rapid7/aruba)
 
 Aruba is Cucumber extension for testing command line applications written in any programming language. Features at a glance:
 
