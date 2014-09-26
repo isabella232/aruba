@@ -1,0 +1,33 @@
+# Recognizes `export`s that are actually prepending values to the pre-existing value as is the case with `PATH`.
+class Aruba::RvmEnv::Prepend < Aruba::RvmEnv::Export
+  #
+  # CONSTANTS
+  #
+
+  # Matches line with format `export <name>=<quote><value>$<name><quote>`.  `<value>` will contain trailing
+  # `File::PATH_SEPARATOR`, so it can be directly prepended to the current value of `<name>` to get the value to set
+  # the environment variable.
+  REGEXP = /\Aexport (?<name>\S+?)(\s+;\s+\k<name>)?=(?<quote>"|')(?<value>.*?#{File::PATH_SEPARATOR})\$\k<name>\k<quote>\Z/
+
+  # Replaces {Aruba::RvmEnv::Export#value `:from` value} with
+  # {Aruba::RvmEnv::Export#value this variable's value}.
+  #
+  # @param options [Hash{Symbol => Object}]
+  # @option options [Aruba::RvmEnv::Unset] :from the old state of this variable.
+  # @option options [Object] :world the cucumber world instance for the current scenario
+  def change(options={})
+    from = options.fetch(:from)
+    world = options.fetch(:world)
+
+    from_directories = from.value.split(File::PATH_SEPARATOR)
+    to_directories = value.split(File::PATH_SEPARATOR)
+
+    path = ENV[name]
+
+    to_directories.zip(from_directories) do |to_directory, from_directory|
+      path = path.gsub(from_directory, to_directory)
+    end
+
+    world.set_env(name, path)
+  end
+end
