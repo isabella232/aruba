@@ -13,8 +13,16 @@ Given /The default aruba timeout is (\d+) seconds/ do |seconds|
   @aruba_timeout_seconds = seconds.to_i
 end
 
+Given /^I create a gemset "([^"]*)"$/ do |gemset|
+  create_gemset(gemset)
+end
+
 Given /^I'm using a clean gemset "([^"]*)"$/ do |gemset|
   use_clean_gemset(gemset)
+end
+
+Given /^I use gemset "([^"]*)"$/ do |gemset|
+  use_gemset(gemset)
 end
 
 Given /^a directory named "([^"]*)"$/ do |dir_name|
@@ -378,4 +386,10 @@ end
 
 After do
   restore_env
+end
+
+After('~@no-clobber') do
+  gemsets.each do |gemset|
+    delete_gemset(gemset)
+  end
 end

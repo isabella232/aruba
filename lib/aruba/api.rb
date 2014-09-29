@@ -69,6 +69,27 @@ module Aruba
       raise "#{current_dir} is not a directory." unless File.directory?(current_dir)
     end
 
+    # @note Created `gemset` is added to {#gemsets}.  Created {#gemsets} are deleted after the scenario as along as
+    #   `@no-clobber` is not set.
+    #
+    # Creates rvm gemset.
+    #
+    # @param gemset [String] name of gemset to create
+    # @return [void]
+    def create_gemset(gemset)
+      run_simple("rvm gemset create #{gemset}")
+      gemsets << gemset
+    end
+
+    # Deletes rvm gemset.
+    #
+    # @param gemset [String] name of gemset to delete
+    # @return [void]
+    def delete_gemset(gemset)
+      # --force to prevent confirmation prompt
+      run_simple("rvm gemset delete --force #{gemset}")
+    end
+
     # The path to the directory which should contain all your test data
     # You might want to overwrite this method to place your data else where.
     #
@@ -76,6 +97,15 @@ module Aruba
     #   The directory path: Each subdirectory is a member of an array
     def dirs
       @dirs ||= ['tmp', 'aruba']
+    end
+
+    # @note {#gemsets} are deleted after the scenario as along as `@no-clobber` is not set.
+    #
+    # The gemsets created by {#create_gemset} that need to be cleaned up after each each scenario.
+    #
+    # @return [Array<String>]
+    def gemsets
+      @gemsets ||= []
     end
 
     # Create a file with given content
@@ -808,21 +838,41 @@ module Aruba
     # @param [String] gemset
     #   The name of the gemset to be used
     def use_clean_gemset(gemset)
-      run_simple(%{rvm gemset create "#{gemset}"}, true)
-      if all_stdout =~ /'#{gemset}' gemset created \((.*)\)\./
-        gem_home = $1
-        set_env('GEM_HOME', gem_home)
-        set_env('GEM_PATH', gem_home)
-        set_env('BUNDLE_PATH', gem_home)
+      create_gemset(gemset)
+      use_gemset(gemset)
+    end
 
-        paths = (ENV['PATH'] || "").split(File::PATH_SEPARATOR)
-        paths.unshift(File.join(gem_home, 'bin'))
-        set_env('PATH', paths.uniq.join(File::PATH_SEPARATOR))
+    def use_gemset(gemset)
+      current_rvm_env_process_name = 'rvm env'
+      run_simple(current_rvm_env_process_name)
+      current_rvm_env = get_process(current_rvm_env_process_name).stdout
+      current_parsed = Aruba::RvmEnv.parse(current_rvm_env)
 
-        run_simple("gem install bundler", true)
-      else
-        raise "I didn't understand rvm's output: #{all_stdout}"
-      end
+      new_rvm_env_process_name = "rvm @#{gemset} do rvm env"
+      run_simple(new_rvm_env_process_name)
+      new_rvm_env = get_process(new_rvm_env_process_name).stdout
+      new_parsed = Aruba::RvmEnv.parse(new_rvm_env)
+
+      Aruba::RvmEnv.change(
+          from: current_parsed,
+          to: new_parsed,
+          world: self
+      )
+
+      #
+      # Remove this gem's bin from path so the gemset is required to declare the gem as a dependency to get access to the
+      # bins
+      #
+
+      directories = ENV['PATH'].split(File::PATH_SEPARATOR)
+      directories.shift
+      path = directories.join(File::PATH_SEPARATOR)
+
+      set_env('PATH', path)
+
+      # Must unset bundler envs or the project under test's Gemfile will be used instead of `gemset`'s Gemfile.
+
+      unset_bundler_env_vars
     end
 
     # Unset variables used by bundler
