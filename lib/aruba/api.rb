@@ -37,6 +37,42 @@ module Aruba
       in_current_dir { File.expand_path File.join(*args) }
     end
 
+    # @note This does not use {#in_current_dir}, but `Dir.pwd`, which is assumed to be the
+    #
+    # Builds gem from a gemspec that is the root of the project under test.
+    #
+    # @param gemspec [String] relative path to gemspec to build.
+    # @return [void]
+    def build_gem(gemspec)
+      process_name = "gem build '#{gemspec}'"
+      root = Pathname.new(Dir.pwd)
+      current_pathname = Pathname.new(current_dir).expand_path
+      root_relative_to_current = root.relative_path_from(current_pathname)
+      current_relative_to_root = current_pathname.relative_path_from(root)
+
+      cd(root_relative_to_current)
+      run_simple(process_name)
+      cd(current_relative_to_root)
+    end
+
+    # Installs latest gem with the given name.
+    #
+    # @param (see #latest_local_gem)
+    # @return [void]
+    def install_latest_local_gem(name)
+      path = latest_local_gem(name)
+      run_simple("gem install '#{path}'")
+    end
+
+    # The last modified gem with the given `name`.
+    #
+    # @param name [String] name of gem without version or extension.
+    def latest_local_gem(name)
+      Dir[File.join(Dir.pwd, "#{name}-*.gem")].sort_by { |f|
+        File.mtime(f)
+      }.last
+    end
+
     # Execute block in current directory
     #
     # @yield

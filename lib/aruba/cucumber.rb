@@ -25,6 +25,14 @@ Given /^I use gemset "([^"]*)"$/ do |gemset|
   use_gemset(gemset)
 end
 
+Given /^I build gem from project's "([^"]*)"$/ do |gemspec|
+  build_gem(gemspec)
+end
+
+Given /^I install latest local "([^"]*)" gem$/ do |name|
+  install_latest_local_gem(name)
+end
+
 Given /^a directory named "([^"]*)"$/ do |dir_name|
   create_dir(dir_name)
 end
