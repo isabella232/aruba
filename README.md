@@ -1,7 +1,9 @@
-[![Build Status](https://travis-ci.org/cucumber/aruba.png)](http://travis-ci.org/cucumber/aruba)
-[![Gem Version](https://badge.fury.io/rb/aruba.svg)](http://badge.fury.io/rb/aruba)
-[![Dependency Status](https://gemnasium.com/cucumber/aruba.png)](https://gemnasium.com/cucumber/aruba.png)
-[![Code Climate](https://codeclimate.com/github/cucumber/aruba.png)](https://codeclimate.com/github/cucumber/aruba)
+[![Build Status](https://travis-ci.org/rapid7/aruba.svg?branch=feature%2FMSP-11399%2Ftools-integration)](https://travis-ci.org/rapid7/aruba)
+[![Dependency Status](https://gemnasium.com/rapid7/aruba.png)](https://gemnasium.com/rapid7/aruba.png)
+[![Code Climate](https://codeclimate.com/github/rapid7/aruba.png)](https://codeclimate.com/github/rapid7/aruba)
+[![Coverage Status](https://img.shields.io/coveralls/rapid7/aruba.svg)](https://coveralls.io/r/rapid7/aruba?branch=feature%2FMSP-11399%2Ftools-integration)
+[![Inline docs](http://inch-ci.org/github/rapid7/aruba.svg?branch=staging/rapid7)](http://inch-ci.org/github/rapid7/aruba)
+[![PullReview stats](https://www.pullreview.com/github/rapid7/aruba/badges/staging/rapid7.svg?)](https://www.pullreview.com/github/rapid7/aruba/reviews/staging/rapid7)
 
 Aruba is Cucumber extension for testing command line applications written in any programming language. Features at a glance:
 
