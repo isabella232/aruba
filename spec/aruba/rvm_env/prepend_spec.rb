@@ -14,7 +14,7 @@ RSpec.describe Aruba::RvmEnv::Prepend do
       }
 
       let(:prepend) {
-        %Q{#{name}=#{quote}#{value}$#{name}#{quote}}
+        "#{name}=#{quote}#{value}$#{name}#{quote}"
       }
 
       let(:value) {
@@ -23,7 +23,7 @@ RSpec.describe Aruba::RvmEnv::Prepend do
 
       context 'with combined export and prepend' do
         let(:line) {
-          %Q{export #{prepend}}
+          "export #{prepend}"
         }
 
         context 'with "' do
@@ -59,7 +59,7 @@ RSpec.describe Aruba::RvmEnv::Prepend do
 
       context 'with separate export and prepend' do
         let(:line) {
-          %Q{export #{name} ; #{prepend}}
+          "export #{name} ; #{prepend}"
         }
 
         context 'with "' do
@@ -147,7 +147,10 @@ RSpec.describe Aruba::RvmEnv::Prepend do
 
     let(:from) {
       described_class.parse(
-          %Q{export #{name}="/Users/alice/.rvm/gems/#{from_ruby_version}@aruba/bin:/Users/alice/.rvm/gems/#{from_ruby_version}@global/bin:/Users/alice/.rvm/rubies/#{from_ruby_version}/bin:$#{name}"}
+          %{export #{name}="/Users/alice/.rvm/gems/#{from_ruby_version}@aruba/bin:} +
+          "/Users/alice/.rvm/gems/#{from_ruby_version}@global/bin:" \
+          "/Users/alice/.rvm/rubies/#{from_ruby_version}/bin:" +
+          %{$#{name}"}
       )
     }
 
@@ -156,7 +159,17 @@ RSpec.describe Aruba::RvmEnv::Prepend do
     }
 
     let(:from_value_expanded) {
-      "/Users/alice/.rvm/gems/#{from_ruby_version}@aruba/bin:/Users/alice/.rvm/gems/#{from_ruby_version}@global/bin:/Users/alice/.rvm/rubies/#{from_ruby_version}/bin:/Users/alice/.rvm/bin:/usr/local/bin:/usr/local/sbin:/opt/X11/bin:/usr/bin:/usr/sbin:/bin:/sbin"
+      "/Users/alice/.rvm/gems/#{from_ruby_version}@aruba/bin:" \
+      "/Users/alice/.rvm/gems/#{from_ruby_version}@global/bin:" \
+      "/Users/alice/.rvm/rubies/#{from_ruby_version}/bin:" \
+      "/Users/alice/.rvm/bin:" \
+      "/usr/local/bin:" \
+      "/usr/local/sbin:" \
+      "/opt/X11/bin:" \
+      "/usr/bin:" \
+      "/usr/sbin:" \
+      "/bin:" \
+      "/sbin"
     }
 
     let(:name) {
@@ -165,7 +178,10 @@ RSpec.describe Aruba::RvmEnv::Prepend do
 
     let(:prepend) {
       described_class.parse(
-          %Q{export #{name}="/Users/alice/.rvm/gems/#{ruby_version}@aruba/bin:/Users/alice/.rvm/gems/#{ruby_version}@global/bin:/Users/alice/.rvm/rubies/#{ruby_version}/bin:$#{name}"}
+          %{export #{name}="/Users/alice/.rvm/gems/#{ruby_version}@aruba/bin:} +
+          "/Users/alice/.rvm/gems/#{ruby_version}@global/bin:" \
+          "/Users/alice/.rvm/rubies/#{ruby_version}/bin:" +
+          %{$#{name}"}
       )
     }
 
@@ -199,7 +215,22 @@ RSpec.describe Aruba::RvmEnv::Prepend do
     it 'set the environment variable by swapping directories in path' do
       change
       world.run 'env'
-      expect(world.all_output).to include("#{name}=/Users/alice/.rvm/gems/#{ruby_version}@aruba/bin:/Users/alice/.rvm/gems/#{ruby_version}@global/bin:/Users/alice/.rvm/rubies/#{ruby_version}/bin:/Users/alice/.rvm/bin:/usr/local/bin:/usr/local/sbin:/opt/X11/bin:/usr/bin:/usr/sbin:/bin:/sbin")
+
+      expect(world.all_output).to(
+        include(
+          "#{name}=/Users/alice/.rvm/gems/#{ruby_version}@aruba/bin:" \
+          "/Users/alice/.rvm/gems/#{ruby_version}@global/bin:" \
+          "/Users/alice/.rvm/rubies/#{ruby_version}/bin:" \
+          "/Users/alice/.rvm/bin:" \
+          "/usr/local/bin:" \
+          "/usr/local/sbin:" \
+          "/opt/X11/bin:" \
+          "/usr/bin:" \
+          "/usr/sbin:" \
+          "/bin:" \
+          "/sbin"
+        )
+      )
     end
   end
 end

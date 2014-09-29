@@ -14,7 +14,7 @@ RSpec.describe Aruba::RvmEnv::Export do
       }
 
       let(:set) {
-        %Q{#{name}=#{quote}#{value}#{quote}}
+        "#{name}=#{quote}#{value}#{quote}"
       }
 
       let(:value) {
@@ -23,7 +23,7 @@ RSpec.describe Aruba::RvmEnv::Export do
 
       context 'with combined export and set' do
         let(:line) {
-          %Q{export #{set}}
+          "export #{set}"
         }
 
         context 'with "' do
@@ -59,7 +59,7 @@ RSpec.describe Aruba::RvmEnv::Export do
 
       context 'with separate export and set' do
         let(:line) {
-          %Q{export #{name} ; #{set}}
+          "export #{name} ; #{set}"
         }
 
         context 'with "' do

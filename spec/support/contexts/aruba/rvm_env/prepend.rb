@@ -1,6 +1,6 @@
 shared_context 'Aruba::RvmEnv::Prepend' do
   let(:line) {
-    %Q{export #{name}="#{value}$#{name}"}
+    %{export #{name}="#{value}$#{name}"}
   }
 
   let(:name) {

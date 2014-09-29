@@ -12,7 +12,7 @@ RSpec.describe Aruba::RvmEnv do
   }
 
   let(:rubies_path) {
-    "#{rvm_path}rubies"
+    "#{rvm_path}rubies/"
   }
 
   let(:rvm_path) {
@@ -46,12 +46,12 @@ RSpec.describe Aruba::RvmEnv do
       ruby_gemset = options.fetch(:ruby_gemset)
       ruby_version = options.fetch(:ruby_version)
       
-<<EOS
-export PATH="#{gems_path}/#{ruby_version}@#{ruby_gemset}/bin:#{gems_path}/#{ruby_version}@global/bin:#{rubies_path}/#{ruby_version}/bin:$PATH"
-export GEM_HOME='#{gems_path}/#{ruby_version}@#{ruby_gemset}'
-export GEM_PATH='#{gems_path}/#{ruby_version}@#{ruby_gemset}:#{gems_path}/#{ruby_version}@global'
-export MY_RUBY_HOME='#{rubies_path}/#{ruby_version}'
-export IRBRC='#{rubies_path}/#{ruby_version}/.irbrc'
+      <<EOS
+export PATH="#{gems_path}#{ruby_version}@#{ruby_gemset}/bin:#{gems_path}#{ruby_version}@global/bin:#{rubies_path}#{ruby_version}/bin:$PATH"
+export GEM_HOME='#{gems_path}#{ruby_version}@#{ruby_gemset}'
+export GEM_PATH='#{gems_path}#{ruby_version}@#{ruby_gemset}:#{gems_path}#{ruby_version}@global'
+export MY_RUBY_HOME='#{rubies_path}#{ruby_version}'
+export IRBRC='#{rubies_path}#{ruby_version}/.irbrc'
 unset MAGLEV_HOME
 unset RBXOPT
 export RUBY_VERSION='#{ruby_version}'
@@ -112,10 +112,10 @@ EOS
 
     before(:each) do
       # set up ENV to match `from`
-      world.set_env('GEM_HOME', "#{gems_path}/#{from_ruby_version}@#{from_ruby_gemset}")
-      world.set_env('GEM_PATH', "#{gems_path}/#{from_ruby_version}@#{from_ruby_gemset}:#{gems_path}/#{from_ruby_version}@global")
-      world.set_env('IRBRC', "#{rubies_path}/#{from_ruby_version}/.irbrc")
-      world.set_env('MY_RUBY_HOME', "#{rubies_path}/#{from_ruby_version}")
+      world.set_env('GEM_HOME', "#{gems_path}#{from_ruby_version}@#{from_ruby_gemset}")
+      world.set_env('GEM_PATH', "#{gems_path}#{from_ruby_version}@#{from_ruby_gemset}:#{gems_path}#{from_ruby_version}@global")
+      world.set_env('IRBRC', "#{rubies_path}#{from_ruby_version}/.irbrc")
+      world.set_env('MY_RUBY_HOME', "#{rubies_path}#{from_ruby_version}")
       world.set_env('RUBY_VERSION', from_ruby_version)
     end
 
@@ -128,12 +128,12 @@ EOS
       it 'changes ruby gemset and ruby version' do
         world.run 'env'
 
-        expect(world.output_from('env')).to include("GEM_HOME=#{gems_path}/#{from_ruby_version}@#{from_ruby_gemset}")
+        expect(world.output_from('env')).to include("GEM_HOME=#{gems_path}#{from_ruby_version}@#{from_ruby_gemset}")
 
         change
         world.run 'env'
 
-        expect(world.output_from('env')).to include("GEM_HOME=#{gems_path}/#{to_ruby_version}@#{to_ruby_gemset}")
+        expect(world.output_from('env')).to include("GEM_HOME=#{gems_path}#{to_ruby_version}@#{to_ruby_gemset}")
       end
     end
 
@@ -141,12 +141,12 @@ EOS
       it 'changes ruby gemset and ruby version, but leaves the global gemset' do
         world.run 'env'
 
-        expect(world.output_from('env')).to include("GEM_PATH=#{gems_path}/#{from_ruby_version}@#{from_ruby_gemset}:#{gems_path}/#{from_ruby_version}@global")
+        expect(world.output_from('env')).to include("GEM_PATH=#{gems_path}#{from_ruby_version}@#{from_ruby_gemset}:#{gems_path}#{from_ruby_version}@global")
 
         change
         world.run 'env'
 
-        expect(world.output_from('env')).to include("GEM_PATH=#{gems_path}/#{to_ruby_version}@#{to_ruby_gemset}:#{gems_path}/#{to_ruby_version}@global")
+        expect(world.output_from('env')).to include("GEM_PATH=#{gems_path}#{to_ruby_version}@#{to_ruby_gemset}:#{gems_path}#{to_ruby_version}@global")
       end
     end
 
@@ -154,12 +154,12 @@ EOS
       it 'changes ruby version' do
         world.run 'env'
 
-        expect(world.output_from('env')).to include("IRBRC=#{rubies_path}/#{from_ruby_version}/.irbrc")
+        expect(world.output_from('env')).to include("IRBRC=#{rubies_path}#{from_ruby_version}/.irbrc")
 
         change
         world.run 'env'
 
-        expect(world.output_from('env')).to include("IRBRC=#{rubies_path}/#{to_ruby_version}/.irbrc")
+        expect(world.output_from('env')).to include("IRBRC=#{rubies_path}#{to_ruby_version}/.irbrc")
       end
     end
 
@@ -167,12 +167,12 @@ EOS
       it 'changes ruby version' do
         world.run 'env'
 
-        expect(world.output_from('env')).to include("MY_RUBY_HOME=#{rubies_path}/#{from_ruby_version}")
+        expect(world.output_from('env')).to include("MY_RUBY_HOME=#{rubies_path}#{from_ruby_version}")
 
         change
         world.run 'env'
 
-        expect(world.output_from('env')).to include("MY_RUBY_HOME=#{rubies_path}/#{to_ruby_version}")
+        expect(world.output_from('env')).to include("MY_RUBY_HOME=#{rubies_path}#{to_ruby_version}")
       end
     end
 
@@ -180,12 +180,12 @@ EOS
       it 'changes ruby gemset and ruby version, but leaves the global gemset' do
         world.run 'env'
 
-        expect(world.output_from('env')).to include("GEM_PATH=#{gems_path}/#{from_ruby_version}@#{from_ruby_gemset}:#{gems_path}/#{from_ruby_version}@global")
+        expect(world.output_from('env')).to include("GEM_PATH=#{gems_path}#{from_ruby_version}@#{from_ruby_gemset}:#{gems_path}#{from_ruby_version}@global")
 
         change
         world.run 'env'
 
-        expect(world.output_from('env')).to include("GEM_PATH=#{gems_path}/#{to_ruby_version}@#{to_ruby_gemset}:#{gems_path}/#{to_ruby_version}@global")
+        expect(world.output_from('env')).to include("GEM_PATH=#{gems_path}#{to_ruby_version}@#{to_ruby_gemset}:#{gems_path}#{to_ruby_version}@global")
       end
     end
 
@@ -222,7 +222,6 @@ EOS
 
         expect(path).to be_a(Aruba::RvmEnv::Export)
       end
-
 
       it 'includes an Aruba::RvmEnv::Export for GEM_PATH' do
         path = parse.find { |variable|
@@ -291,17 +290,17 @@ EOS
 
     context 'with combined export and set' do
       let(:rvm_env) {
-<<EOS
-export PATH="#{gems_path}/#{ruby_version}@#{ruby_gemset}/bin:#{gems_path}/#{ruby_version}@global/bin:#{rubies_path}/#{ruby_version}/bin:#{rvm_path}bin:$PATH"
+        <<EOS
+export PATH="#{gems_path}#{ruby_version}@#{ruby_gemset}/bin:#{gems_path}#{ruby_version}@global/bin:#{rubies_path}#{ruby_version}/bin:#{rvm_path}bin:$PATH"
 export rvm_env_string='#{ruby_version}@#{ruby_gemset}'
 export rvm_path='#{rvm_path}'
 export rvm_ruby_string='#{ruby_version}'
 export rvm_gemset_name='#{ruby_gemset}'
 export RUBY_VERSION='#{ruby_version}'
-export GEM_HOME='#{gems_path}/#{ruby_version}@#{ruby_gemset}'
-export GEM_PATH='#{gems_path}/#{ruby_version}@#{ruby_gemset}:#{gems_path}/#{ruby_version}@global'
-export MY_RUBY_HOME='#{rubies_path}/#{ruby_version}'
-export IRBRC='#{rubies_path}/#{ruby_version}/.irbrc'
+export GEM_HOME='#{gems_path}#{ruby_version}@#{ruby_gemset}'
+export GEM_PATH='#{gems_path}#{ruby_version}@#{ruby_gemset}:#{gems_path}#{ruby_version}@global'
+export MY_RUBY_HOME='#{rubies_path}#{ruby_version}'
+export IRBRC='#{rubies_path}#{ruby_version}/.irbrc'
 unset MAGLEV_HOME
 EOS
       }
@@ -311,17 +310,17 @@ EOS
 
     context 'with separate export and set' do
       let(:rvm_env) {
-<<EOS
-export PATH ; PATH="#{gems_path}/#{ruby_version}@#{ruby_gemset}/bin:#{gems_path}/#{ruby_version}@global/bin:#{rubies_path}/#{ruby_version}/bin:#{rvm_path}bin:$PATH"
+        <<EOS
+export PATH ; PATH="#{gems_path}#{ruby_version}@#{ruby_gemset}/bin:#{gems_path}#{ruby_version}@global/bin:#{rubies_path}#{ruby_version}/bin:#{rvm_path}bin:$PATH"
 export rvm_env_string ; rvm_env_string='#{ruby_version}@#{ruby_gemset}'
 export rvm_path ; rvm_path='#{rvm_path}'
 export rvm_ruby_string ; rvm_ruby_string='#{ruby_version}'
 export rvm_gemset_name ; rvm_gemset_name='#{ruby_gemset}'
 export RUBY_VERSION ; RUBY_VERSION='#{ruby_version}'
-export GEM_HOME ; GEM_HOME='#{gems_path}/#{ruby_version}@#{ruby_gemset}'
-export GEM_PATH ; GEM_PATH='#{gems_path}/#{ruby_version}@#{ruby_gemset}:#{gems_path}/#{ruby_version}@global'
-export MY_RUBY_HOME ; MY_RUBY_HOME='#{rubies_path}/#{ruby_version}'
-export IRBRC ; IRBRC='#{rubies_path}/#{ruby_version}/.irbrc'
+export GEM_HOME ; GEM_HOME='#{gems_path}#{ruby_version}@#{ruby_gemset}'
+export GEM_PATH ; GEM_PATH='#{gems_path}#{ruby_version}@#{ruby_gemset}:#{gems_path}#{ruby_version}@global'
+export MY_RUBY_HOME ; MY_RUBY_HOME='#{rubies_path}#{ruby_version}'
+export IRBRC ; IRBRC='#{rubies_path}#{ruby_version}/.irbrc'
 unset MAGLEV_HOME
 EOS
       }
@@ -399,9 +398,9 @@ EOS
 
       let(:parsed) {
         [
-            export,
-            prepend,
-            unset
+          export,
+          prepend,
+          unset
         ]
       }
 

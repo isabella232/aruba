@@ -4,7 +4,7 @@ shared_context 'Aruba::RvmEnv::Export' do
   }
 
   let(:set) {
-    %Q{#{name}='#{value}'}
+    "#{name}='#{value}'"
   }
 
   let(:value) {
