@@ -5,10 +5,8 @@ Feature: project gem
   'gem install'.
 
   Scenario:
-    Given I'm using a clean gemset "aruba-builder"
-    And I build gem from project's "aruba.gemspec"
-    When I run `ls *.gem`
-    Then the output should match /aruba-.*\.gem/
+    When I build gem from project's "aruba.gemspec"
+    Then a file matching %r<aruba-.*\.gem> should exist
 
   @gem-install
   Scenario:

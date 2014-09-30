@@ -53,6 +53,20 @@ module Aruba
       cd(root_relative_to_current)
       run_simple(process_name)
       cd(current_relative_to_root)
+
+      gem_build_output = get_process(process_name).output
+      match = gem_build_output.match(/^  File: (?<gem_file>.*)$/)
+
+      unless match
+        fail "Cannot parse gem build output for built gem name:\n#{gem_build_output}"
+      end
+
+      # need to include root and expand so path is valid inside `in_current_dir`
+      gem_pathname = root.join(match[:gem_file]).expand_path
+
+      in_current_dir {
+        FileUtils.mv(gem_pathname, gem_pathname.basename)
+      }
     end
 
     # Installs latest gem with the given name.
