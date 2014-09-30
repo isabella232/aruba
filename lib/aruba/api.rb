@@ -81,10 +81,14 @@ module Aruba
     # The last modified gem with the given `name`.
     #
     # @param name [String] name of gem without version or extension.
+    # @return [String] absolute path to newest gem with `name` in {#current_dir}.
+    # @return [nil] if no gem matching `name` was found
     def latest_local_gem(name)
-      Dir[File.join(Dir.pwd, "#{name}-*.gem")].sort_by { |f|
-        File.mtime(f)
-      }.last
+      in_current_dir {
+        Dir["#{name}-*.gem"].sort_by { |f|
+          File.mtime(f)
+        }.last
+      }
     end
 
     # Execute block in current directory
