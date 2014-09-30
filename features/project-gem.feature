@@ -10,8 +10,8 @@ Feature: project gem
 
   @gem-install
   Scenario:
-    Given I'm using a clean gemset "aruba-installer"
-    And I build gem from project's "aruba.gemspec"
+    Given I build gem from project's "aruba.gemspec"
+    And I'm using a clean gemset "aruba-installer"
     And I install latest local "aruba" gem
     When I run `gem list`
     Then the output from "gem list" should contain "aruba"
