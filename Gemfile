@@ -6,7 +6,7 @@ platforms :rbx do
   gem 'rubinius-developer_tools'
 end
 
-gem 'childprocess', git: 'rapid7/childprocess', branch: 'bug/MSP-11414/unset-in-parent'
+gem 'childprocess', github: 'rapid7/childprocess', branch: 'bug/MSP-11414/unset-in-parent'
 
 # Use source from sibling folders (if available) instead of gems
 # %w[cucumber].each do |g|
