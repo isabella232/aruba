@@ -1,7 +1,6 @@
 # All adjusts to timeouts should go in this file to ensure that the correct precedence between platform and tags is
 # maintained
 
-
 Before('~@gem-install') do
   if RUBY_PLATFORM == 'java'
     @aruba_timeout_seconds = 15
