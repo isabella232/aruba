@@ -33,7 +33,3 @@ Before do |scenario|
   # set environment variable so child processes will merge their coverage data with parent process's coverage data.
   set_env('RUBYOPT', "-r#{simplecov_setup_pathname} #{ENV['RUBYOPT']}")
 end
-
-Before do
-  @aruba_timeout_seconds = 10
-end

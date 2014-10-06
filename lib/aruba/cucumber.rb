@@ -13,8 +13,24 @@ Given /The default aruba timeout is (\d+) seconds/ do |seconds|
   @aruba_timeout_seconds = seconds.to_i
 end
 
+Given /^I create a gemset "([^"]*)"$/ do |gemset|
+  create_gemset(gemset)
+end
+
 Given /^I'm using a clean gemset "([^"]*)"$/ do |gemset|
   use_clean_gemset(gemset)
+end
+
+Given /^I use gemset "([^"]*)"$/ do |gemset|
+  use_gemset(gemset)
+end
+
+Given /^I build gem from project's "([^"]*)"$/ do |gemspec|
+  build_gem(gemspec)
+end
+
+Given /^I install latest local "([^"]*)" gem$/ do |name|
+  install_latest_local_gem(name)
 end
 
 Given /^a directory named "([^"]*)"$/ do |dir_name|
@@ -378,4 +394,10 @@ end
 
 After do
   restore_env
+end
+
+After('~@no-clobber') do
+  gemsets.each do |gemset|
+    delete_gemset(gemset)
+  end
 end

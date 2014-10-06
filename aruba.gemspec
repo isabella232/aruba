@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name        = 'aruba'
-  s.version     = '0.6.1'
+  s.version     = '0.6.3.pre.metasploit.pre.yard.pre.port'
   s.authors     = ["Aslak Hellesøy", "David Chelimsky", "Mike Sassak", "Matt Wynne"]
   s.description = 'CLI Steps for Cucumber, hand-crafted for you in Aruba'
   s.summary     = "aruba-#{s.version}"
@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.homepage    = 'http://github.com/cucumber/aruba'
 
   s.add_runtime_dependency 'cucumber', '>= 1.1.1'
-  s.add_runtime_dependency 'childprocess', '>= 0.3.6'
+  s.add_runtime_dependency 'childprocess', '>= 0.5.5'
   s.add_runtime_dependency 'rspec-expectations', '>= 2.7.0'
   s.add_development_dependency 'bcat', '>= 0.6.1'
   s.add_development_dependency 'kramdown', '>= 0.14'

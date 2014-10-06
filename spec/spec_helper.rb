@@ -1,6 +1,7 @@
 # require before anything else so as many files as possible have coverage gathered
 require 'simplecov'
 
+require 'pathname'
 require 'rspec/core'
 require 'aruba/api'
 
@@ -37,6 +38,12 @@ module Kernel
     $VERBOSE = old_verbose
   end
 end unless Kernel.respond_to? :silence_warnings
+
+support_glob = Pathname.new(__FILE__).parent.join('support', '**', '*.rb')
+
+Dir[support_glob].each do |f|
+  require f
+end
 
 RSpec.configure do |config|
   config.filter_run :focus => true
